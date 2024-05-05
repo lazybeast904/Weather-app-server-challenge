@@ -1,11 +1,12 @@
 $(document).ready(function () {
-    //search button feature
+    //search button feature 
+    const APIkey = "1bd61f60e655007fbc909a547f6f9656"
     $("#search-button").on("click", function () {
       //get value in input search-value.
       var searchTerm = $("#search-value").val();
       //empty input field.
       $("#search-value").val("");
-      weatherFunction(searchTerm);
+      getCityCoordinates(searchTerm);
       weatherForecast(searchTerm);
     });
   
@@ -13,7 +14,7 @@ $(document).ready(function () {
     $("#search-button").keypress(function (event) {
       var keycode = (event.keyCode ? event.keyCode : event.which);
       if (keycode === 13) {
-        weatherFunction(searchTerm);
+        getCityCoordinates(searchTerm);
         weatherForecast(searchTerm);
       }
     });
@@ -23,7 +24,7 @@ $(document).ready(function () {
   
     //sets history array search to correct length
     if (history.length > 0) {
-      weatherFunction(history[history.length - 1]);
+      getCityCoordinates(history[history.length - 1]);
     }
     //makes a row for each element in history array(searchTerms)
     for (var i = 0; i < history.length; i++) {
@@ -38,18 +39,19 @@ $(document).ready(function () {
   
     //listener for list item on click function
     $(".history").on("click", "li", function () {
-      weatherFunction($(this).text());
+      getCityCoordinates($(this).text());
       weatherForecast($(this).text());
     });
   
-    function weatherFunction(searchTerm) {
-  
+    function getCityCoordinates(searchTerm) {
+  console.log(searchTerm);
       $.ajax({
         type: "GET",
         url: "https://api.openweathermap.org/data/2.5/weather?q=" + searchTerm + "&appid=9f112416334ce37769e5c8683b218a0d",
   
   
-      }).then(function (data) {
+      }).then(function (data) { 
+        console.log(data);
         //if index of search value does not exist
         if (history.indexOf(searchTerm) === -1) {
           //push searchValue to history array
@@ -76,9 +78,8 @@ $(document).ready(function () {
 
         $.ajax({
           type: "GET",
-          url: "api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={API key}" + lat + "&lon=" + lon,
-          url: "api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={1bd61f60e655007fbc909a547f6f9656}" + lat + "&lon=" + lon,
-
+          url: "api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon={lon}&appid=" + APIkey +"&lon=" + lon,
+          
 
         }).then(function (response) {
         
@@ -107,7 +108,8 @@ $(document).ready(function () {
       });
     }
     // function weatherForecast(searchTerm) 
-    function weatherForecast(searchTerm) {
+    function weatherForecast(searchTerm) { 
+      console.log(searchTerm);
       $.ajax({
         type: "GET",
         url: "https://api.openweathermap.org/data/2.5/forecast?q=" + searchTerm + "1bd61f60e655007fbc909a547f6f9656",
